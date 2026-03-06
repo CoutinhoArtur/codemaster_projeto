@@ -228,3 +228,51 @@ carouselSlides.parentElement.addEventListener('mouseenter', () => {
 // Retoma a transição automática ao remover o mouse do carrossel
 carouselSlides.parentElement.addEventListener('mouseleave', startAutoSlide);
 
+// ================== FORMULÁRIO DE CONTATO ==================
+// Seleciona o formulário de contato e a mensagem de agradecimento
+const contactForm = document.getElementById('contactForm');
+const thankYouMessage = document.getElementById('thankYouMessage');
+
+// Adiciona um evento de envio ao formulário
+contactForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  thankYouMessage.style.display = 'block'; // Exibe a mensagem de agradecimento
+
+  // Envia os dados do formulário usando Fetch API
+  const formData = new FormData(contactForm);
+  fetch(contactForm.action, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(response => {
+    if (response.ok) {
+      setTimeout(() => window.location.reload(), 2000); // Recarrega a página após 2 segundos
+    } else {
+      alert('Erro ao enviar formulário. Tente novamente.');
+    }
+  })
+  .catch(() => alert('Erro na conexão. Tente novamente.'));
+});
+
+// ================== ANIMAÇÃO DA SEÇÃO "SOBRE MIM" ==================
+// Seleciona a seção "Sobre Mim"
+const aboutSection = document.querySelector('.about');
+
+// Função para verificar se a seção está visível na tela
+function checkAboutVisibility() {
+  const rect = aboutSection.getBoundingClientRect();
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  // Verifica se a seção está dentro da área visível da tela
+  if (rect.top <= windowHeight * 0.75 && rect.bottom >= 0) {
+    aboutSection.classList.add('visible'); // Adiciona a classe "visible"
+    window.removeEventListener('scroll', checkAboutVisibility); // Remove o listener após a animação
+  }
+}
+
+// Adiciona um listener para o evento de scroll
+window.addEventListener('scroll', checkAboutVisibility);
+
+// Verifica a visibilidade ao carregar a página (caso a seção já esteja visível)
+checkAboutVisibility();
